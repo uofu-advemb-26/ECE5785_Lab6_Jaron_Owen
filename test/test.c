@@ -3,24 +3,44 @@
 #include <stdint.h>
 #include <unity.h>
 #include "unity_config.h"
+#include "test_thread.h"
 
-void setUp(void) {}
+#define TASK_SUPERVISOR_TASK_PRIORITY      ( tskIDLE_PRIORITY + 3UL )
+#define TASK_SUPERVISOR_TASK_STACK_SIZE configMINIMAL_STACK_SIZE
+
+void supervisor_task(__unused void *params){
+
+    SemaphoreHandle_t semaphore = xSemaphoreCreateBinary();
+
+    TaskHandle_t task_h_1;
+    xTaskCreate(task_1, "Task 1", TASK_1_TASK_STACK_SIZE,
+                (void*)&semaphore, TASK_1_TASK_PRIORITY, task_h_1);
+
+    TaskHandle_t task_h_2;
+    xTaskCreate(task_2, "Task 2", TASK_2_TASK_STACK_SIZE,
+                (void*)&semaphore, TASK_2_TASK_PRIORITY, task_h_2);
+
+
+        // Delay
+
+        // Start high priority task
+}
+
+
+void setUp(void) {
+
+
+
+}
 
 void tearDown(void) {}
 
-void test_variable_assignment()
-{
-    int x = 1;
-    TEST_ASSERT_TRUE_MESSAGE(x == 1,"Variable assignment failed.");
-}
+//void test_variable_assignment()
+//{
+//    int x = 1;
+//    TEST_ASSERT_TRUE_MESSAGE(x == 1,"Variable assignment failed.");
+//}
 
-void test_multiplication(void)
-{
-    int x = 30;
-    int y = 6;
-    int z = x / y;
-    TEST_ASSERT_TRUE_MESSAGE(z == 5, "Multiplication of two integers returned incorrect value.");
-}
 
 int main (void)
 {
