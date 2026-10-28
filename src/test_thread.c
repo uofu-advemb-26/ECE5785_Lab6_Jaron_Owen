@@ -6,12 +6,6 @@
 
 #include "test_thread.h"
 
-
-//#define TASK_SUPERVISOR_TASK_PRIORITY      ( tskIDLE_PRIORITY + 1UL )
-//#define TASK_SUPERVISOR_TASK_STACK_SIZE configMINIMAL_STACK_SIZE
-
-
-
 void high_priority(void *params){
 
     SemaphoreHandle_t *semaphore = (*SemaphoreHandle_t)params;
@@ -20,18 +14,18 @@ void high_priority(void *params){
 
 }
 
-void task_1(void *params){
+void mid_priority(__unused void *params){
 
-    SemaphoreHandle_t *semaphore = (*SemaphoreHandle_t)params;
-
-    xSemaphoreTake(&semaphore, portMax_Delay);
+    while(1){
+        __nop();
+    }
 
 }
 
-void task_2(void *params){
+void low_priority(void *params){
 
     SemaphoreHandle_t *semaphore = (*SemaphoreHandle_t)params;
 
-    xSemaphoreTake(&semaphore, portMax_Delay);
+    xSemaphoreGive(&semaphore);
 
 }

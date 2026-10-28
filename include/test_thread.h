@@ -1,15 +1,15 @@
 #pragma once
 
-#define TASK_HIGH_PRIORITY_TASK_PRIORITY      ( tskIDLE_PRIORITY + 2UL )
+#define TASK_HIGH_PRIORITY_TASK_PRIORITY      ( tskIDLE_PRIORITY + 3UL )
 #define TASK_HIGH_PRIORITY_TASK_STACK_SIZE configMINIMAL_STACK_SIZE
 
-#define TASK_1_TASK_PRIORITY      ( tskIDLE_PRIORITY + 1UL )
-#define TASK_1_TASK_STACK_SIZE configMINIMAL_STACK_SIZE
+#define TASK_MID_TASK_PRIORITY      ( tskIDLE_PRIORITY + 2UL )
+#define TASK_MID_TASK_STACK_SIZE configMINIMAL_STACK_SIZE
 
-#define TASK_2_TASK_PRIORITY      ( tskIDLE_PRIORITY + 1UL )
-#define TASK_2_TASK_STACK_SIZE configMINIMAL_STACK_SIZE
+#define TASK_LOW_TASK_PRIORITY      ( tskIDLE_PRIORITY + 1UL )
+#define TASK_LOW_TASK_STACK_SIZE configMINIMAL_STACK_SIZE
 
 
 void high_priority(void *params);
-void task_1(void *params);
-void task_2(void *params);
+void mid_priority(__unused void *params);
+void low_priority(void *params);
