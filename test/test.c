@@ -21,8 +21,9 @@
 
 
 
-void supervisor_task(__unused void *params){
 
+void priority_test(void){
+    
     printf("supervisor started \r\n");
 
     xSemaphoreHandle semaphore = xSemaphoreCreateBinary();
@@ -31,33 +32,39 @@ void supervisor_task(__unused void *params){
 
     TaskHandle_t task_high;
     xTaskCreate(high_priority, "Task High", TASK_HIGH_TASK_STACK_SIZE,
-                semaphore, TASK_HIGH_TASK_PRIORITY, task_high);
+                semaphore, TASK_HIGH_TASK_PRIORITY, &task_high);
+
+    taskYIELD();
+    vTaskDelay(10);
+
+
 
     TaskHandle_t task_mid;
     xTaskCreate(mid_priority, "Task Mid", TASK_MID_TASK_STACK_SIZE,
-                NULL, TASK_MID_TASK_PRIORITY, task_mid);
+                NULL, TASK_MID_TASK_PRIORITY, &task_mid);
+
+    taskYIELD();
+    vTaskDelay(10);
 
     TaskHandle_t task_low;
     xTaskCreate(low_priority, "Task Low", TASK_LOW_TASK_STACK_SIZE,
-                semaphore, TASK_LOW_TASK_PRIORITY, task_low);
+                semaphore, TASK_LOW_TASK_PRIORITY, &task_low);
 
+    taskYIELD();    
     vTaskDelay(100);
 
+    TaskStatus_t xTaskDetailsHigh, xTaskDetailsMid, xTaskDetailsLow;
 
-    TaskStatus_t xTaskDetails;
-    TaskHandle_t xHandle;
 
-    xHandle = xTaskGetHandle(task_high);
-    vTaskGetInfo(xHandle, &xTaskDetails, pdTRUE, eInvalid);    
-    unsigned long high_count = xTaskDetails.ulRunTimeCounter;
+    vTaskGetInfo(task_high, &xTaskDetailsHigh, pdFALSE, eRunning);    
+    unsigned long high_count = xTaskDetailsHigh.ulRunTimeCounter;
 
-    xHandle = xTaskGetHandle(task_mid);
-    vTaskGetInfo(xHandle, &xTaskDetails, pdTRUE, eInvalid);    
-    unsigned long mid_count = xTaskDetails.ulRunTimeCounter;
 
-    xHandle = xTaskGetHandle(task_low);
-    vTaskGetInfo(xHandle, &xTaskDetails, pdTRUE, eInvalid);    
-    unsigned long low_count = xTaskDetails.ulRunTimeCounter;
+    vTaskGetInfo(task_mid, &xTaskDetailsMid, pdFALSE, eRunning);    
+    unsigned long mid_count = xTaskDetailsMid.ulRunTimeCounter;
+
+    vTaskGetInfo(task_low, &xTaskDetailsLow, pdTRUE, eInvalid);    
+    unsigned long low_count = xTaskDetailsLow.ulRunTimeCounter;
 
     vSemaphoreDelete(semaphore);
     vTaskDelete(task_high);
@@ -66,20 +73,8 @@ void supervisor_task(__unused void *params){
 
     printf("High task execution[%d]\n\r Mid task execution[%d]\n\r Low task execution[%d]\n\r", high_count, mid_count, low_count);
 
-    vTaskDelay(100);
-    printf("Task deleted :)\r\n");
-    vTaskDelete(NULL);
-}
-
-void priority_test(void){
-    
-    TaskHandle_t supervisor_handle;
-    xTaskCreate(supervisor_task, "Supervisor Task", TASK_SUPERVISOR_TASK_STACK_SIZE,
-                NULL, TASK_SUPERVISOR_TASK_PRIORITY, supervisor_handle);
-
-    vTaskDelay(400);
-
-    
+    //vTaskDelay(100);
+    //printf("Task deleted :)\r\n");
 
 }
 
