@@ -13,3 +13,6 @@
 void high_priority(void *params);
 void mid_priority(__unused void *params);
 void low_priority(void *params);
+
+void busy_busy(__unused void *params);
+void busy_yield(__unused void *params);
