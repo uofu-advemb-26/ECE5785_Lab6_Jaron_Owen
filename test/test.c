@@ -26,9 +26,8 @@ void priority_test(void){
     
     printf("supervisor started \r\n");
 
-    xSemaphoreHandle semaphore = xSemaphoreCreateBinary();
-    //xSemaphoreGive(semaphore);
-    //xSemaphoreTake(semaphore, portMAX_DELAY);
+    //xSemaphoreHandle semaphore = xSemaphoreCreateBinary();
+    xSemaphoreHandle semaphore = xSemaphoreCreateMutex();
 
     TaskHandle_t task_high;
     xTaskCreate(high_priority, "Task High", TASK_HIGH_TASK_STACK_SIZE,
@@ -36,8 +35,6 @@ void priority_test(void){
 
     taskYIELD();
     vTaskDelay(10);
-
-
 
     TaskHandle_t task_mid;
     xTaskCreate(mid_priority, "Task Mid", TASK_MID_TASK_STACK_SIZE,
