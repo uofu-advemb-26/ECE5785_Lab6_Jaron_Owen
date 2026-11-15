@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <pico/stdlib.h>
 #include <stdint.h>
 #include <unity.h>
@@ -334,7 +335,7 @@ void setUp(void) {}
 
 void tearDown(void) {}
 
-int main_task (void)
+void main_task (void)
 {
     while (1) {
         vTaskDelay(1000); // Give time for TTY to attach.
