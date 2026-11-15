@@ -25,7 +25,7 @@
 
 void priority_test_semaphore(void){
     
-    printf("supervisor started \r\n");
+    //printf("supervisor started \r\n");
 
     xSemaphoreHandle semaphore = xSemaphoreCreateBinary();
 
@@ -68,7 +68,7 @@ void priority_test_semaphore(void){
     vTaskDelete(task_mid);
     vTaskDelete(task_low);
 
-    printf("High task execution[%d]\n\r Mid task execution[%d]\n\r Low task execution[%d]\n\r", high_count, mid_count, low_count);
+    //printf("High task execution[%d]\n\r Mid task execution[%d]\n\r Low task execution[%d]\n\r", high_count, mid_count, low_count);
 
     TEST_ASSERT_LESS_OR_EQUAL(100, high_count);
     TEST_ASSERT_GREATER_OR_EQUAL(100000, mid_count);
@@ -79,7 +79,7 @@ void priority_test_semaphore(void){
 
 void priority_test_mutex(void){
     
-    printf("supervisor started \r\n");
+    //printf("supervisor started \r\n");
 
     xSemaphoreHandle semaphore = xSemaphoreCreateMutex();
 
@@ -122,7 +122,7 @@ void priority_test_mutex(void){
     vTaskDelete(task_mid);
     vTaskDelete(task_low);
 
-    printf("High task execution[%d]\n\r Mid task execution[%d]\n\r Low task execution[%d]\n\r", high_count, mid_count, low_count);
+    //printf("High task execution[%d]\n\r Mid task execution[%d]\n\r Low task execution[%d]\n\r", high_count, mid_count, low_count);
 
     TEST_ASSERT_GREATER_OR_EQUAL(100000, high_count);
     TEST_ASSERT_EQUAL(low_count, 0);
@@ -152,7 +152,7 @@ void test_busy_busy_equal_priority(void){
     vTaskDelete(task_1);
     vTaskDelete(task_2);
 
-    printf("Busy Busy Equal Priority Task 1 [%d] Task 2 [%d] \n\r", count_1, count_2);
+    //printf("Busy Busy Equal Priority Task 1 [%d] Task 2 [%d] \n\r", count_1, count_2);
 
     int difference = abs(count_1 - count_2);
     TEST_ASSERT_LESS_OR_EQUAL(2000, difference);
@@ -181,7 +181,7 @@ void test_busy_yield_equal_priority(void){
     vTaskDelete(task_1);
     vTaskDelete(task_2);
 
-    printf("Busy yield Equal Priority Task 1 [%d] Task 2 [%d] \n\r", count_1, count_2);
+    //printf("Busy yield Equal Priority Task 1 [%d] Task 2 [%d] \n\r", count_1, count_2);
 
     int difference = abs(count_1 - count_2);
     TEST_ASSERT_LESS_OR_EQUAL(2000, difference);
@@ -207,7 +207,7 @@ void test_both_equal_priority(void){
     vTaskGetInfo(task_2, &xTaskDetails, pdFALSE, eRunning);    
     unsigned long count_2 = xTaskDetails.ulRunTimeCounter;
 
-    printf("Equal Priority: Busy Yield [%d] Busy Busy [%d] \n\r", count_1, count_2);
+    //printf("Equal Priority: Busy Yield [%d] Busy Busy [%d] \n\r", count_1, count_2);
 
     vTaskDelete(task_1);
     vTaskDelete(task_2);
@@ -239,7 +239,7 @@ void test_busy_busy_high_first(void){
     vTaskDelete(task_1);
     vTaskDelete(task_2);
 
-    printf("Busy Busy: High Priority [%d] Low Priority [%d] \n\r", count_1, count_2);
+    //printf("Busy Busy: High Priority [%d] Low Priority [%d] \n\r", count_1, count_2);
 
     TEST_ASSERT_EQUAL(0, count_2);
 
@@ -267,7 +267,7 @@ void test_busy_busy_low_first(void){
     vTaskDelete(task_1);
     vTaskDelete(task_2);
 
-    printf("Busy Busy: Low Priority [%d] High Priority [%d] \n\r", count_1, count_2);
+    //printf("Busy Busy: Low Priority [%d] High Priority [%d] \n\r", count_1, count_2);
 
     TEST_ASSERT_EQUAL(0, count_1);
 
@@ -296,7 +296,7 @@ void test_busy_yield_high_first(void){
     vTaskDelete(task_1);
     vTaskDelete(task_2);
 
-    printf("Busy Yield: High Priority [%d] Low Priority [%d] \n\r", count_1, count_2);
+    //printf("Busy Yield: High Priority [%d] Low Priority [%d] \n\r", count_1, count_2);
 
     TEST_ASSERT_EQUAL(0, count_2);
 
@@ -324,7 +324,7 @@ void test_busy_yield_low_first(void){
     vTaskDelete(task_1);
     vTaskDelete(task_2);
 
-    printf("Busy Yield: Low Priority [%d] High Priority [%d] \n\r", count_1, count_2);
+    //printf("Busy Yield: Low Priority [%d] High Priority [%d] \n\r", count_1, count_2);
 
     TEST_ASSERT_EQUAL(0, count_1);
 
@@ -350,8 +350,8 @@ void main_task (__unused void *params)
         RUN_TEST(test_busy_busy_low_first);
         RUN_TEST(test_busy_yield_high_first);
         RUN_TEST(test_busy_yield_low_first);
-        UNITY_END();
         vTaskDelay(5000);
+        UNITY_END();
     }
 }
 
