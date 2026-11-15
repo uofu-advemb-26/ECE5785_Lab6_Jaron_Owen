@@ -22,11 +22,64 @@
 
 
 
-void priority_test(void){
+void priority_test_semaphore(void){
     
     printf("supervisor started \r\n");
 
-    //xSemaphoreHandle semaphore = xSemaphoreCreateBinary();
+    xSemaphoreHandle semaphore = xSemaphoreCreateBinary();
+
+    TaskHandle_t task_high;
+    xTaskCreate(high_priority, "Task High", TASK_HIGH_TASK_STACK_SIZE,
+                semaphore, TASK_HIGH_TASK_PRIORITY, &task_high);
+
+    taskYIELD();
+    vTaskDelay(10);
+
+    TaskHandle_t task_mid;
+    xTaskCreate(mid_priority, "Task Mid", TASK_MID_TASK_STACK_SIZE,
+                NULL, TASK_MID_TASK_PRIORITY, &task_mid);
+
+    taskYIELD();
+    vTaskDelay(10);
+
+    TaskHandle_t task_low;
+    xTaskCreate(low_priority, "Task Low", TASK_LOW_TASK_STACK_SIZE,
+                semaphore, TASK_LOW_TASK_PRIORITY, &task_low);
+
+    taskYIELD();    
+    vTaskDelay(100);
+
+    TaskStatus_t xTaskDetailsHigh, xTaskDetailsMid, xTaskDetailsLow;
+
+
+    vTaskGetInfo(task_high, &xTaskDetailsHigh, pdFALSE, eRunning);    
+    unsigned long high_count = xTaskDetailsHigh.ulRunTimeCounter;
+
+
+    vTaskGetInfo(task_mid, &xTaskDetailsMid, pdFALSE, eRunning);    
+    unsigned long mid_count = xTaskDetailsMid.ulRunTimeCounter;
+
+    vTaskGetInfo(task_low, &xTaskDetailsLow, pdTRUE, eInvalid);    
+    unsigned long low_count = xTaskDetailsLow.ulRunTimeCounter;
+
+    vSemaphoreDelete(semaphore);
+    vTaskDelete(task_high);
+    vTaskDelete(task_mid);
+    vTaskDelete(task_low);
+
+    printf("High task execution[%d]\n\r Mid task execution[%d]\n\r Low task execution[%d]\n\r", high_count, mid_count, low_count);
+
+    TEST_ASSERT_LESS_OR_EQUAL(100, high_count);
+    TEST_ASSERT_GREATER_OR_EQUAL(100000, mid_count);
+    TEST_ASSERT_EQUAL(low_count, 0);
+
+}
+
+
+void priority_test_mutex(void){
+    
+    printf("supervisor started \r\n");
+
     xSemaphoreHandle semaphore = xSemaphoreCreateMutex();
 
     TaskHandle_t task_high;
@@ -70,8 +123,9 @@ void priority_test(void){
 
     printf("High task execution[%d]\n\r Mid task execution[%d]\n\r Low task execution[%d]\n\r", high_count, mid_count, low_count);
 
-    //vTaskDelay(100);
-    //printf("Task deleted :)\r\n");
+    TEST_ASSERT_GREATER_OR_EQUAL(100000, high_count);
+    TEST_ASSERT_EQUAL(low_count, 0);
+    TEST_ASSERT_EQUAL(mid_count, 0);
 
 }
 
@@ -85,9 +139,8 @@ int main_task (void)
         vTaskDelay(1000); // Give time for TTY to attach.
         printf("Start tests\n");
         UNITY_BEGIN();
-        //RUN_TEST(test_variable_assignment);
-        //RUN_TEST(test_multiplication);
-        RUN_TEST(priority_test);
+        RUN_TEST(priority_test_semaphore);
+        RUN_TEST(priority_test_mutex);
         vTaskDelay(1000);
         UNITY_END();
     }
