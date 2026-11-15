@@ -2,7 +2,6 @@ add_executable(mytest
   test.c 
   unity_config.c 
   ../src/test_thread.c
-  ../src/counter.c
   )
 
 target_link_libraries(mytest PRIVATE
