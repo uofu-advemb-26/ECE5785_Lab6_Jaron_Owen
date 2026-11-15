@@ -335,7 +335,7 @@ void setUp(void) {}
 
 void tearDown(void) {}
 
-void main_task (void)
+void main_task (__unused void *params)
 {
     while (1) {
         vTaskDelay(1000); // Give time for TTY to attach.
@@ -360,7 +360,7 @@ int main (void)
     stdio_init_all();
     TaskHandle_t main_task_h;
     xTaskCreate(main_task, "Main Task", MAIN_TASK_STACK_SIZE,
-        NULL, MAIN_TASK_PRIORITY, main_task_h);
+        NULL, MAIN_TASK_PRIORITY, &main_task_h);
 
     vTaskStartScheduler();
 
