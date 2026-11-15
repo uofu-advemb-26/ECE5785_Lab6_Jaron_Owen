@@ -13,7 +13,10 @@ void high_priority(void *params){
 
     xSemaphoreTake(semaphore, portMAX_DELAY);
 
-    printf("high priority ran");
+    while(1){
+        __nop();
+    }
+
 
 }
 
